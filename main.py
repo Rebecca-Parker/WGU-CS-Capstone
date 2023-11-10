@@ -1,15 +1,33 @@
 
 import pandas as pd
-from matplotlib import pyplot
+import matplotlib.pyplot as plt
+import seaborn as sns
 from pandas.plotting import scatter_matrix
 from sklearn import preprocessing
 from sklearn import metrics
 from sklearn import svm
+from sklearn.metrics import ConfusionMatrixDisplay
 
 # Initial training data
 datafile = "FoodDataTrainA1.csv"
 names = ['calories', 'vitaminPerCalorie', 'quality']
 df = pd.read_csv(datafile, names=names)
+
+# Visualizations for the data
+num_qualities = df.groupby(by='quality').size()
+print('')
+print('Number of each quality category\n')
+print(num_qualities)
+print('')
+
+calories_histoplot = sns.histplot(df, x='calories', hue='quality', kde=True, bins=30)
+plt.show()
+
+vitamins_histoplot = sns.histplot(df, x='vitaminPerCalorie', hue='quality', kde=True, bins=30)
+plt.show()
+
+data_visual_scatter = sns.pairplot(df, hue='quality')
+plt.show()
 
 # Dependent variable of model, the 'quality'
 y1 = df.values[:, 2]
@@ -30,8 +48,11 @@ svm_model.fit(x1_with_minmax, y1)
 # Getting accuracy metrics for testing on same set as training
 y1_true = y1
 y1_pred_svm = svm_model.predict(x1_with_minmax)
-print("accuracy of predicting original set 1, same set as training, using svm")
+print("\nAccuracy of predicting original set 1, same set as training, using svm:")
 print(metrics.accuracy_score(y1_true, y1_pred_svm))
+print("See first confusion matrix")
+ConfusionMatrixDisplay.from_predictions(y1_true, y1_pred_svm)
+plt.show()
 
 
 # Testing with second set, known nutrition, known quality
@@ -41,8 +62,11 @@ x2 = df2.values[:, 0:2]
 x2_with_minmax = min_max_scaler.fit_transform(x2)
 y2_true = df2.values[:, 2]
 y2_pred_svm = svm_model.predict(x2_with_minmax)
-print("accuracy of predicting on set 2, svm")
+print("\nAccuracy of prediction on set 2, svm:")
 print(metrics.accuracy_score(y2_true, y2_pred_svm))
+print("See second confusion matrix")
+ConfusionMatrixDisplay.from_predictions(y2_true, y2_pred_svm)
+plt.show()
 
 
 # Testing with third set, known nutrition, known quality
@@ -52,12 +76,18 @@ x3 = df3.values[:, 0:2]
 x3_with_minmax = min_max_scaler.fit_transform(x3)
 y3_true = df3.values[:, 2]
 y3_pred_svm = svm_model.predict(x3_with_minmax)
-print("accuracy of predicting on set 3, svm")
+print("\nAccuracy of prediction on set 3, svm:")
 print(metrics.accuracy_score(y3_true, y3_pred_svm))
+print("See third confusion matrix\n")
+ConfusionMatrixDisplay.from_predictions(y3_true, y3_pred_svm)
+plt.show()
 
 
 # Get new data to predict with, known nutrition, unknown quality, user input
 new_calories = float(input("Please enter the calories per serving:\n"))
+if new_calories <= 0:
+    new_calories = 0.01
+
 user_option = int(input("Please select an option: \n"
                         "Type 1 to enter total vitamins per serving \n"
                         "Type 2 to enter vitamin amounts individually \n"))
@@ -130,3 +160,4 @@ scaled_prediction_data = scaling_array_with_minmax[-1]
 predicted_quality = svm_model.predict([scaled_prediction_data])
 print('The predicted quality for this item is: ')
 print(predicted_quality)
+print('1 = standard, 2 = good, 3 = best')
