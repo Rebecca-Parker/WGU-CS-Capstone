@@ -1,9 +1,7 @@
 
 import pandas as pd
-import numpy as np
 from matplotlib import pyplot
 from pandas.plotting import scatter_matrix
-from sklearn import linear_model
 from sklearn import preprocessing
 from sklearn import metrics
 from sklearn import svm
@@ -106,6 +104,8 @@ else:
 
 new_vitamin_per_calorie = new_total_vitamin / new_calories
 
+# Each parameter needs to be within the bounds of the training set.
+# There is no qualitative difference to any values above or below so this will bring the new values within bounds.
 if new_vitamin_per_calorie > 215.00:
     new_vitamin_per_calorie = 215.00
 elif new_vitamin_per_calorie < 0.49:
@@ -119,6 +119,9 @@ elif new_calories < 3.33:
 new_prediction_data = [new_calories, new_vitamin_per_calorie]
 print(new_prediction_data)
 
+# The training array was scaled using a particular min and max.
+# To keep the new data consistent, it needs to be scaled the same way so this
+# array provides the previously used min and max.
 scaling_array = [[3.33, 0.49], [53.76, 215.79]]
 
 scaling_array.append(new_prediction_data)
