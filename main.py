@@ -6,40 +6,36 @@ from sklearn import preprocessing
 from sklearn import metrics
 from sklearn import svm
 
+# Initial training data
 datafile = "FoodDataTrainA1.csv"
-
 names = ['calories', 'vitaminPerCalorie', 'quality']
 df = pd.read_csv(datafile, names=names)
 
-#dependent variable of model, the 'quality'
+# Dependent variable of model, the 'quality'
 y1 = df.values[:, 2]
-#independent variables of model, from nutrition label
+# Independent variables of model, from nutrition label
 x1 = df.values[:, 0:2]
 
-#scaling the data to [0,1]
+# Scaling the data to [0,1]
 min_max_scaler = preprocessing.MinMaxScaler()
 x1_with_minmax = min_max_scaler.fit_transform(x1)
 
 
-#training with initial set, known nutrition, known quality
-#svm model
+# Training with initial set, known nutrition, known quality
+# SVM model
 svm_model = svm.SVC(max_iter=1000)
-
-
-#training the model
 svm_model.fit(x1_with_minmax, y1)
 
 
-#getting accuracy metrics for testing on same set as training
+# Getting accuracy metrics for testing on same set as training
 y1_true = y1
 y1_pred_svm = svm_model.predict(x1_with_minmax)
-print("accuracy of predicting original set 1, svm")
+print("accuracy of predicting original set 1, same set as training, using svm")
 print(metrics.accuracy_score(y1_true, y1_pred_svm))
 
 
 
-#testing with second set, known nutrition, known quality
-
+# Testing with second set, known nutrition, known quality
 datafile2 = "FoodDataTrainB1.csv"
 df2 = pd.read_csv(datafile2, names=names)
 x2 = df2.values[:, 0:2]
@@ -51,8 +47,7 @@ print(metrics.accuracy_score(y2_true, y2_pred_svm))
 
 
 
-#predicting with third set, known nutrition, unknown quality
-
+# Testing with third set, known nutrition, known quality
 datafile3 = "FoodDataValidate1.csv"
 df3 = pd.read_csv(datafile3, names=names)
 x3 = df3.values[:, 0:2]
@@ -62,6 +57,8 @@ y3_pred_svm = svm_model.predict(x3_with_minmax)
 print("accuracy of predicting on set 3, svm")
 print(metrics.accuracy_score(y3_true, y3_pred_svm))
 
+
+# Get new data to predict with, known nutrition, unknown quality, user input
 new_calories = float(input("Please enter the calories per serving:\n"))
 user_option = int(input("Please select an option: \n"
                         "Type 1 to enter total vitamins per serving \n"
@@ -117,18 +114,19 @@ elif new_calories < 3.33:
     new_calories = 3.33
 
 new_prediction_data = [new_calories, new_vitamin_per_calorie]
-print(new_prediction_data)
+# print(new_prediction_data) # test statement
 
 # The training array was scaled using a particular min and max.
 # To keep the new data consistent, it needs to be scaled the same way so this
 # array provides the previously used min and max.
 scaling_array = [[3.33, 0.49], [53.76, 215.79]]
-
+# Add the new data
 scaling_array.append(new_prediction_data)
-
+# Scale the new data so it aligns with how the model was trained
 scaling_array_with_minmax = min_max_scaler.fit_transform(scaling_array)
+# Retrieve just the new scaled data
 scaled_prediction_data = scaling_array_with_minmax[-1]
-
+# Get the model's prediction off of the new scaled input
 predicted_quality = svm_model.predict([scaled_prediction_data])
 print('The predicted quality for this item is: ')
 print(predicted_quality)
