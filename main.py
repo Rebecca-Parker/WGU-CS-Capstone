@@ -34,7 +34,6 @@ print("accuracy of predicting original set 1, same set as training, using svm")
 print(metrics.accuracy_score(y1_true, y1_pred_svm))
 
 
-
 # Testing with second set, known nutrition, known quality
 datafile2 = "FoodDataTrainB1.csv"
 df2 = pd.read_csv(datafile2, names=names)
@@ -44,7 +43,6 @@ y2_true = df2.values[:, 2]
 y2_pred_svm = svm_model.predict(x2_with_minmax)
 print("accuracy of predicting on set 2, svm")
 print(metrics.accuracy_score(y2_true, y2_pred_svm))
-
 
 
 # Testing with third set, known nutrition, known quality
@@ -98,6 +96,8 @@ elif user_option == 2:
                          new_lycopene)
 else:
     print("I'm sorry Dave, I'm afraid I can't do that")
+    print("Please start again")
+    quit()
 
 new_vitamin_per_calorie = new_total_vitamin / new_calories
 
@@ -130,5 +130,3 @@ scaled_prediction_data = scaling_array_with_minmax[-1]
 predicted_quality = svm_model.predict([scaled_prediction_data])
 print('The predicted quality for this item is: ')
 print(predicted_quality)
-
-
