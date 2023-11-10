@@ -9,7 +9,7 @@ from sklearn import svm
 from sklearn.metrics import ConfusionMatrixDisplay
 
 # Initial training data
-datafile = "FoodDataTrainA1.csv"
+datafile = "FoodDataTrain.csv"
 names = ['calories', 'vitaminPerCalorie', 'quality']
 df = pd.read_csv(datafile, names=names)
 
@@ -56,7 +56,7 @@ plt.show()
 
 
 # Testing with second set, known nutrition, known quality
-datafile2 = "FoodDataTrainB1.csv"
+datafile2 = "FoodDataValidate.csv"
 df2 = pd.read_csv(datafile2, names=names)
 x2 = df2.values[:, 0:2]
 x2_with_minmax = min_max_scaler.fit_transform(x2)
@@ -66,20 +66,6 @@ print("\nAccuracy of prediction on set 2, new set, known quality, svm:")
 print(metrics.accuracy_score(y2_true, y2_pred_svm))
 print("See second confusion matrix")
 ConfusionMatrixDisplay.from_predictions(y2_true, y2_pred_svm)
-plt.show()
-
-
-# Testing with third set, known nutrition, known quality
-datafile3 = "FoodDataValidate1.csv"
-df3 = pd.read_csv(datafile3, names=names)
-x3 = df3.values[:, 0:2]
-x3_with_minmax = min_max_scaler.fit_transform(x3)
-y3_true = df3.values[:, 2]
-y3_pred_svm = svm_model.predict(x3_with_minmax)
-print("\nAccuracy of prediction on set 3, new set, known quality, svm:")
-print(metrics.accuracy_score(y3_true, y3_pred_svm))
-print("See third confusion matrix\n")
-ConfusionMatrixDisplay.from_predictions(y3_true, y3_pred_svm)
 plt.show()
 
 
