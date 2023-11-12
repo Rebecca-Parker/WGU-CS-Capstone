@@ -69,11 +69,14 @@ plt.show()
 
 
 # Get new data to predict with, known nutrition, unknown quality, user input
-new_calories = float(input("Please enter the calories per serving:\n"))
+new_calories = float(input("\n\n******"
+                           "\nWelcome to the Baby Food Rating app. "
+                           "\n******"
+                           "\n\nTo evaluate a baby food, please enter the calories per serving:\n"))
 if new_calories <= 0:
     new_calories = 0.01
 
-user_option = int(input("Please select an option: \n"
+user_option = int(input("Thank you. \nPlease select an option: \n"
                         "Type 1 to enter total vitamins per serving \n"
                         "Type 2 to enter vitamin amounts individually \n"))
 
