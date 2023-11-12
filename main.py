@@ -64,15 +64,15 @@ x1_with_minmax = min_max_scaler.fit_transform(x1)
 # Second ML model:
 # Training with initial set, known nutrition, known quality
 # SVM model
-svm_model = svm.SVC(max_iter=1000)
-svm_model.fit(x1_with_minmax, y1)
+svc_model = svm.SVC(max_iter=1000)
+svc_model.fit(x1_with_minmax, y1)
 
 
 # Getting accuracy metrics for testing on same set as training
 y1_true = y1
 
 # SVM prediction
-y1_pred_svm = svm_model.predict(x1_with_minmax)
+y1_pred_svm = svc_model.predict(x1_with_minmax)
 print("\nAccuracy of predicting original set 1, same set as training, using svm:")
 print(metrics.accuracy_score(y1_true, y1_pred_svm))
 print("See first confusion matrix")
@@ -87,7 +87,7 @@ x2_with_minmax = min_max_scaler.fit_transform(x2)
 y2_true = df2.values[:, 2]
 
 # SVM prediction
-y2_pred_svm = svm_model.predict(x2_with_minmax)
+y2_pred_svm = svc_model.predict(x2_with_minmax)
 print("\nAccuracy of prediction on set 2, new set, known quality, svm:")
 print(metrics.accuracy_score(y2_true, y2_pred_svm))
 print("See second confusion matrix")
@@ -172,7 +172,7 @@ scaling_array_with_minmax = min_max_scaler.fit_transform(scaling_array)
 # Retrieve just the new scaled data
 scaled_prediction_data = scaling_array_with_minmax[-1]
 # Get the model's prediction off of the new scaled input
-predicted_quality = svm_model.predict([scaled_prediction_data])
+predicted_quality = svc_model.predict([scaled_prediction_data])
 print('The predicted quality for this item is: ')
 print(predicted_quality)
 print('1 = standard, 2 = good, 3 = best')
