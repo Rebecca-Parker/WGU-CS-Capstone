@@ -42,7 +42,7 @@ x1_with_minmax = min_max_scaler.fit_transform(x1)
 # SVM model
 svm_model = svm.SVC(max_iter=1000)
 svm_model.fit(x1_with_minmax, y1)
-
+#check check
 
 # Getting accuracy metrics for testing on same set as training
 y1_true = y1
