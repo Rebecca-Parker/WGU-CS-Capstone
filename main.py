@@ -6,6 +6,7 @@ from sklearn import preprocessing
 from sklearn import metrics
 from sklearn import svm
 from sklearn.metrics import ConfusionMatrixDisplay
+# from sklearn import linear_model # see line 47
 
 # Initial training data
 datafile = "FoodDataTrain.csv"
@@ -38,6 +39,29 @@ min_max_scaler = preprocessing.MinMaxScaler()
 x1_with_minmax = min_max_scaler.fit_transform(x1)
 
 
+# This was the first model attempted on the data. It uses Logistic Regression supervised classification.
+# The accuracy metrics did not pass specifications, at approx 67% accurate with
+# all incorrect classifications being under-ratings. It is left in the code for future reference and trackability.
+#
+# #Logistic Regression model
+# log_model = linear_model.LogisticRegression(max_iter=1000)
+# log_model.fit(x1_with_minmax, y1)
+#
+# # Logistic Regression prediction
+# y1_pred_log = log_model.predict(x1_with_minmax)
+# print("\nAccuracy of predicting original set 1, same set as training, using logistic regression:")
+# print(metrics.accuracy_score(y1_true, y1_pred_log))
+# print("See nth confusion matrix")
+# ConfusionMatrixDisplay.from_predictions(y1_true, y1_pred_log)
+#
+# # Logistic Regression prediction
+# y2_pred_log = log_model.predict(x2_with_minmax)
+# print("\nAccuracy of prediction on set 2, new set, known quality, log:")
+# print(metrics.accuracy_score(y2_true, y2_pred_log))
+# print("See nth confusion matrix")
+# ConfusionMatrixDisplay.from_predictions(y2_true, y2_pred_log)
+
+# Second ML model:
 # Training with initial set, known nutrition, known quality
 # SVM model
 svm_model = svm.SVC(max_iter=1000)
@@ -46,6 +70,8 @@ svm_model.fit(x1_with_minmax, y1)
 
 # Getting accuracy metrics for testing on same set as training
 y1_true = y1
+
+# SVM prediction
 y1_pred_svm = svm_model.predict(x1_with_minmax)
 print("\nAccuracy of predicting original set 1, same set as training, using svm:")
 print(metrics.accuracy_score(y1_true, y1_pred_svm))
@@ -53,13 +79,14 @@ print("See first confusion matrix")
 ConfusionMatrixDisplay.from_predictions(y1_true, y1_pred_svm)
 plt.show()
 
-
 # Testing with second set, known nutrition, known quality
 datafile2 = "FoodDataValidate.csv"
 df2 = pd.read_csv(datafile2, names=names)
 x2 = df2.values[:, 0:2]
 x2_with_minmax = min_max_scaler.fit_transform(x2)
 y2_true = df2.values[:, 2]
+
+# SVM prediction
 y2_pred_svm = svm_model.predict(x2_with_minmax)
 print("\nAccuracy of prediction on set 2, new set, known quality, svm:")
 print(metrics.accuracy_score(y2_true, y2_pred_svm))
